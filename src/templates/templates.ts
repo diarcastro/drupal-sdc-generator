@@ -1,3 +1,5 @@
+import { join } from 'node:path';
+
 const Templates = {
   SDC: [
     'sdc/component.component.yml.ejs',
@@ -7,5 +9,8 @@ const Templates = {
     'sdc/README.md.ejs',
   ],
 };
+
+
+export const TEMPLATES_DIR = join(process.cwd(), '/src/templates');
 
 export default Templates;
