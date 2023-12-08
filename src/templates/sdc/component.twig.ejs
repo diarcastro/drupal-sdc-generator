@@ -1,0 +1,12 @@
+{% set attributes = attributes ?? create_attribute() %}
+
+{% set classes =  [
+  'component',
+  className,
+] %}
+
+<article {{ attributes.addClass(classes) }}>
+  {%block component %}
+    Component markup here
+  {% endblock %}
+</article>

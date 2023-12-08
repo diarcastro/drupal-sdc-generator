@@ -1,0 +1,32 @@
+$schema: https://git.drupalcode.org/project/sdc/-/raw/1.x/src/metadata.schema.json
+name: component
+status: stable
+slots:
+  component:
+    title: Component
+    description: Override the component markup
+props:
+  type: object
+  required:
+    - title
+  properties:
+    attributes:
+      type: Drupal\Core\Template\Attribute
+    title:
+      type: string
+      title: Title
+      description: Title description
+      examples:
+        - This is a title example
+    description:
+      type: string
+      title: Description
+      description: Description
+      examples:
+        - this is a description example
+    className:
+      type: string
+      title: className
+      description: className
+      examples:
+        - my-custom-class
