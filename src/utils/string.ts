@@ -3,6 +3,7 @@ import _snakeCase from 'lodash/snakeCase';
 import _kebabCase from 'lodash/kebabCase';
 import _lowerCase from 'lodash/lowerCase';
 import _startCase from 'lodash/startCase';
+import _camelCase from 'lodash/camelCase';
 
 export class StringHelper {
   text: string;
@@ -11,6 +12,9 @@ export class StringHelper {
     this.text = text || '';
   }
 
+  /**
+   * String in snake case
+   */
   get machineName() {
     return this.snakeCase;
   }
@@ -36,6 +40,13 @@ export class StringHelper {
     return StringHelper.toKebabCase(this.text);
   }
 
+  /**
+   * Sanitize string to filename case
+   */
+  get camelCase() {
+    return StringHelper.toCamelCase(this.text);
+  }
+
   static toSnakeCase(str: string) {
     if (!str) {
       return '';
@@ -58,5 +69,13 @@ export class StringHelper {
     }
 
     return _startCase(_lowerCase(str));
+  }
+
+  static toCamelCase(str: string) {
+    if (!str) {
+      return '';
+    }
+
+    return _camelCase(_deburr(str));
   }
 }

@@ -28,7 +28,8 @@ export const SDCGenerator = () => {
         componentName,
         status,
       };
-      const response = await fetch(`/api/generate-component?componentName=${JSON.stringify(data)}`);
+      const params = new URLSearchParams(data);
+      const response = await fetch(`/api/generate-component?${params}`);
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
       const link = document.createElement('a');
