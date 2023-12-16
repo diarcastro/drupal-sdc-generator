@@ -1,10 +1,17 @@
 'use client';
 
-import { useState, SyntheticEvent } from 'react';
+import {
+  SyntheticEvent,
+  useContext,
+} from 'react';
 import { StringHelper } from '@/utils/string';
+import { SDCGeneratorContext } from '@/app/contexts/SDCGeneratorProvider';
 
 export const SDCGenerator = () => {
-  const [componentName, setComponentName] = useState('');
+  const {
+    componentName,
+    setComponentName,
+  } = useContext(SDCGeneratorContext);
 
   const onDownloadComponent = async (formEvent: SyntheticEvent) => {
     console.log('onDownloadComponent');
@@ -47,7 +54,7 @@ export const SDCGenerator = () => {
         onClick={onDownloadComponent}
         className="bg-pine-green hover:bg-pine-green text-white py-2 px-4 rounded-md"
         value="Download Component"
-       />
+      />
     </form>
   );
 };
