@@ -5,14 +5,18 @@ import {
   SyntheticEvent,
   useContext,
 } from 'react';
+
+import _map from 'lodash/map';
 import { StringHelper } from '@/utils/string';
-import { SDCGeneratorContext } from '@/app/contexts/SDCGeneratorProvider';
+import { SDCGeneratorContext, SDCStatus } from '@/app/contexts/SDCGeneratorProvider';
 import { Text } from '@/app/components/Text';
 
 export const SDCGenerator = () => {
   const {
     componentName,
     setComponentName,
+    setStatus,
+    status,
   } = useContext(SDCGeneratorContext);
 
   const onDownloadComponent = async (formEvent: SyntheticEvent) => {
@@ -20,7 +24,11 @@ export const SDCGenerator = () => {
 
     formEvent.preventDefault();
     if (componentName) {
-      const response = await fetch(`/api/generate-component?componentName=${componentName}`);
+      const data = {
+        componentName,
+        status,
+      };
+      const response = await fetch(`/api/generate-component?componentName=${JSON.stringify(data)}`);
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
       const link = document.createElement('a');
@@ -32,6 +40,14 @@ export const SDCGenerator = () => {
 
     return false;
   };
+
+  const statusOptions = _map(SDCStatus, (statusOption, statusOptionKey) => {
+    return (
+      <option key={statusOptionKey} value={statusOption}>
+        {statusOption}
+      </option>
+    )
+  });
 
   return (
     <form className="max-w-5 xl flex flex-row gap-4 w-full flex-wrap items-start" onSubmit={onDownloadComponent}>
@@ -48,7 +64,7 @@ export const SDCGenerator = () => {
                 </span>
               </h1>
               <div className="text-pine-green text-sm">
-                status
+                { status }
               </div>
             </Fragment>
           )
@@ -72,7 +88,28 @@ export const SDCGenerator = () => {
         />
       </aside>
       <section className="grow">
-        <Text label="Component Name" id="componentName" value={componentName} onChange={setComponentName} />
+        <div className="flex flex-row gap-4 items-center">
+          <div className="grow">
+            <Text label="Component Name" id="componentName" value={componentName} onChange={setComponentName} />
+          </div>
+          {
+            componentName && (
+              <div className="relative">
+                <select id="status" name="status"
+                        onChange={(e) => setStatus(e.target.value as SDCStatus)}
+                        defaultValue={status}
+                        className="text-center bg-white border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-0 focus:border-olive-drab block w-full px-2.5 pb-2.5 pt-4 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-0 dark:focus:border-olive-drab">
+                  {statusOptions}
+                </select>
+                <label
+                  htmlFor="status"
+                  className="absolute text-sm rounded-md text-pine-green dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white/50 backdrop-blur-md dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-olive-drab peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1">
+                  Status
+                </label>
+              </div>
+            )
+          }
+        </div>
       </section>
     </form>
   );
